@@ -9,8 +9,8 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) throws ParserConfigurationException, SQLException {
-//        String folderPath = args[0];
-        String folderPath = "/home/framzik/Загрузки/фиас/91";
+        String folderPath = args[0];
+//        String folderPath = "/home/framzik/Загрузки/фиас/91";
         XmlParser xmlParser = new XmlParser();
         DataSourceDb dataSource = new DataSourceDb();
         Writer writer = new Writer(dataSource.getDataSource());

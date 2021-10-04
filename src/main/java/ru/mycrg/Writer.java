@@ -2,6 +2,7 @@ package ru.mycrg;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 
@@ -27,8 +28,8 @@ public class Writer {
         System.out.println("Start creating tables");
 
         try (final Connection connection = dataSource.getConnection()) {
-            EncodedResource resource = new EncodedResource(new FileSystemResource(
-                    "src/main/resources/init_all_tables.sql"));
+            EncodedResource resource = new EncodedResource(new UrlResource(
+                    "https://raw.githubusercontent.com/framzik/fiaz_all/master/src/main/resources/init_all_tables.sql"));
             ScriptUtils.executeSqlScript(connection, resource);
 
             log.info("Creating tables complete");

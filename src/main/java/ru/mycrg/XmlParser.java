@@ -69,9 +69,11 @@ public class XmlParser {
             }
         }
         result.put(tableName, queries);
-        log.info(String.format("End writing info from: %s, writing %s raws", fileName, nodeList.getLength()));
+        writer.writeValue(result);
+
+        log.info(String.format("End writing info from: %s, writing %s raws", fileName, nodeList.getLength() - 1));
         System.out.println(
-                (String.format("End writing info from: %s, writing %s raws", fileName, nodeList.getLength())));
+                (String.format("End writing info from: %s, writing %s raws", fileName, nodeList.getLength() - 1)));
     }
 
     private String initQuery(NamedNodeMap attributes, String tableName) {
