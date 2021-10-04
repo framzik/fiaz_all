@@ -11,19 +11,22 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class XmlParser {
 
-    private final DocumentBuilder documentBuilder;
-
     private final Logger log = Logger.getLogger(XmlParser.class);
+
+    private final DocumentBuilder documentBuilder;
 
     public XmlParser() throws ParserConfigurationException {
         this.documentBuilder = DocumentBuilderFactory.newDefaultInstance().newDocumentBuilder();
     }
 
-    public Optional<Map<String, List<String>>> parseData(File xmlFile) {
+    public void parseAndWriteData(File xmlFile, Writer writer) {
         log.info(String.format("Start parsing info from: %s", xmlFile.getName()));
         System.out.println(String.format("Start parsing info from: %s", xmlFile.getName()));
 
@@ -33,16 +36,17 @@ public class XmlParser {
             doc.getDocumentElement().normalize();
             NodeList nodeList = doc.getElementsByTagName("*");
 
-            return parseData(nodeList, xmlFile.getName());
+            parseAndWriteData(nodeList, xmlFile.getName(), writer);
         } catch (IOException | SAXException e) {
             log.error(String.format("Can't parse file: %s ", e.getMessage()));
             System.out.println(String.format("Can't parse file: %s ", e.getMessage()));
         }
-
-        return Optional.empty();
     }
 
-    private Optional<Map<String, List<String>>> parseData(NodeList nodeList, String fileName) {
+    private void parseAndWriteData(NodeList nodeList, String fileName, Writer writer) {
+        log.info(String.format("Writing infos from %s", fileName));
+        System.out.println(String.format("Writing infos from %s", fileName));
+
         Map<String, List<String>> result = new HashMap<>();
         List<String> queries = new ArrayList<>();
         String tableName = initTableName(fileName);
@@ -52,13 +56,22 @@ public class XmlParser {
 
             String query = initQuery(attributes, tableName);
             queries.add(query);
+
+            if (i % 10000 == 0) {
+                result.put(tableName, queries);
+                writer.writeValue(result);
+
+                log.info(String.format("Processing....was wrote %s raws of %s", i, nodeList.getLength()));
+                System.out.println(String.format("Processing....was wrote %s raws of %s", i, nodeList.getLength()));
+
+                result.clear();
+                queries.clear();
+            }
         }
         result.put(tableName, queries);
-        log.info(String.format("End parsing info from: %s, prepare for writing %s raws", fileName, result.size()));
+        log.info(String.format("End writing info from: %s,  writing %s raws", fileName, nodeList.getLength()));
         System.out.println(
-                (String.format("End parsing info from: %s, prepare for writing %s raws", fileName, result.size())));
-
-        return Optional.of(result);
+                (String.format("End writing info from: %s,  writing %s raws", fileName, nodeList.getLength())));
     }
 
     private String initQuery(NamedNodeMap attributes, String tableName) {

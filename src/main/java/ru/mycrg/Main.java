@@ -5,8 +5,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 public class Main {
 
@@ -25,10 +23,7 @@ public class Main {
                 List<File> fileNames = Arrays.asList(xmlFile.listFiles());
 
                 fileNames.forEach(file -> {
-                    Optional<Map<String, List<String>>> oParse = xmlParser.parseData(file);
-                    oParse.ifPresent(info -> {
-                        writer.writeValue(info, file);
-                    });
+                    xmlParser.parseAndWriteData(file, writer);
                 });
             }
         } else {

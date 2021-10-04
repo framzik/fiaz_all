@@ -1,3 +1,4 @@
+drop schema if exists fiaz CASCADE;
 CREATE SCHEMA IF NOT EXISTS fiaz;
 
 CREATE TABLE IF NOT EXISTS fiaz.address_objects
