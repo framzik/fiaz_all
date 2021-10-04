@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS fiaz.normative_docs
     type       integer       NOT NULL,
     kind       integer       NOT NULL,
     updatedate date,
-    orgname    varchar(255),
+    orgname    varchar(900),
     regnum     varchar(100),
     regdate    date,
     accdate    date,
@@ -274,7 +274,7 @@ ALTER TABLE fiaz.object_levels
 CREATE TABLE IF NOT EXISTS fiaz.operation_types
 (
     id         bigserial    NOT NULL,
-    name       varchar(100) NOT NULL,
+    name       varchar(700) NOT NULL,
     shortname  varchar(100),
     "desc"     varchar(250),
     updatedate date,
